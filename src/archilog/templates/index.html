@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Cagnottes – Archilog{% endblock %}
+{% block content %}
+<h2>Mes cagnottes</h2>
+
+<div class="card">
+    <h3>Créer une cagnotte</h3>
+    <form action="/cagnottes/creer" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-row">
+            <label>{{ form.nom.label.text }}
+                {{ form.nom(placeholder="Ex : Vacances été") }}
+            </label>
+            <button class="btn btn-primary" type="submit">Créer</button>
+        </div>
+        {% for error in form.nom.errors %}
+        <p class="alert-error" style="margin-top:.5rem">{{ error }}</p>
+        {% endfor %}
+    </form>
+</div>
+
+<div class="card">
+    {% if cagnottes %}
+    <table>
+        <thead>
+            <tr><th>Nom</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+        {% for c in cagnottes %}
+        <tr>
+            <td><a class="link" href="/cagnottes/{{ c.id }}">{{ c.nom }}</a></td>
+            <td>
+                <form action="/cagnottes/{{ c.id }}/supprimer" method="post" style="display:inline"
+                      onsubmit="return confirm('Supprimer cette cagnotte et toutes ses dépenses ?')">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="btn btn-danger btn-sm" type="submit">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty">Aucune cagnotte pour le moment.</p>
+    {% endif %}
+</div>
+{% endblock %}

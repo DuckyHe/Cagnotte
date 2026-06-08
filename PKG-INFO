@@ -1,0 +1,31 @@
+Metadata-Version: 2.3
+Name: archilog
+Version: 0.1.0
+Summary: Application de partage des dépenses (cagnotte)
+Requires-Dist: click>=8.0
+Requires-Dist: flask>=3.0
+Requires-Dist: flask-httpauth>=4.8
+Requires-Dist: flask-wtf>=1.2
+Requires-Dist: pydantic>=2.0
+Requires-Dist: spectree>=2.0
+Requires-Dist: sqlalchemy>=2.0
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+
+# archilog
+
+A simple project for educational purpose.
+
+```bash
+$ uv sync           # install project dependencies
+$ uv run archilog   # run the project
+Usage: archilog [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  display
+```
+
+Course & examples : [https://kathode.neocities.org](https://kathode.neocities.org)

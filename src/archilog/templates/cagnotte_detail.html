@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}{{ cagnotte.nom }} – Cagnotte{% endblock %}
+{% block content %}
+<h2>{{ cagnotte.nom }}</h2>
+
+{% if error %}
+<div class="alert-error">{{ error }}</div>
+{% endif %}
+
+<!-- Dépenses -->
+<div class="card">
+    <h3>Dépenses</h3>
+    {% if depenses %}
+    <table>
+        <thead>
+            <tr><th>Participant</th><th>Montant</th><th>Date</th><th></th></tr>
+        </thead>
+        <tbody>
+        {% for d in depenses %}
+        <tr>
+            <td>{{ d.participant }}</td>
+            <td>{{ "%.2f"|format(d.montant) }} €</td>
+            <td>{{ d.date_paiement }}</td>
+            <td>
+                <form action="/depenses/{{ d.id }}/supprimer" method="post" style="display:inline">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="cagnotte_id" value="{{ cagnotte.id }}">
+                    <button class="btn btn-danger btn-sm" type="submit">✕</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty">Aucune dépense.</p>
+    {% endif %}
+
+    <h3>Ajouter une dépense</h3>
+    <form action="/cagnottes/{{ cagnotte.id }}/depenses/ajouter" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-row">
+            <label>{{ form.participant.label.text }}
+                {{ form.participant(placeholder="Prénom") }}
+            </label>
+            <label>{{ form.montant.label.text }}
+                {{ form.montant(step="0.01", min="0.01", placeholder="0.00") }}
+            </label>
+            <label>{{ form.date_paiement.label.text }}
+                {{ form.date_paiement() }}
+            </label>
+            <button class="btn btn-primary" type="submit">Ajouter</button>
+        </div>
+        {% for field in [form.participant, form.montant, form.date_paiement] %}
+        {% for err in field.errors %}
+        <p class="alert-error" style="margin-top:.4rem">{{ err }}</p>
+        {% endfor %}
+        {% endfor %}
+    </form>
+</div>
+
+<!-- Remboursements -->
+<div class="card">
+    <h3>Qui doit à qui ?</h3>
+    {% if remboursements %}
+    <table>
+        <thead>
+            <tr><th>Débiteur</th><th>Doit payer</th><th>Créancier</th></tr>
+        </thead>
+        <tbody>
+        {% for r in remboursements %}
+        <tr>
+            <td>{{ r.debiteur }}</td>
+            <td><strong>{{ "%.2f"|format(r.montant) }} €</strong></td>
+            <td>{{ r.creancier }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% elif depenses %}
+    <p class="empty">✓ Tout est équilibré !</p>
+    {% else %}
+    <p class="empty">Ajoutez des dépenses pour calculer les remboursements.</p>
+    {% endif %}
+</div>
+
+<p><a class="link" href="/">← Retour aux cagnottes</a></p>
+{% endblock %}

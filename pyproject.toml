@@ -1,0 +1,23 @@
+[project]
+name = "archilog"
+version = "0.1.0"
+description = "Application de partage des dépenses (cagnotte)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "click>=8.0",
+    "flask>=3.0",
+    "flask-httpauth>=4.8",
+    "flask-wtf>=1.2",
+    "pydantic>=2.0",
+    "spectree>=2.0",
+    "sqlalchemy>=2.0",
+]
+
+[project.scripts]
+archilog = "archilog.views.cli:cli"
+archilog-web = "archilog.views.web:run"
+
+[build-system]
+requires = ["uv_build>=0.10.4,<0.11.0"]
+build-backend = "uv_build"
